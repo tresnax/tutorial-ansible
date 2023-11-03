@@ -1,0 +1,6 @@
+- name: Play 1
+  hosts: all
+  tasks:
+    - name: execute command 'ls'
+      command: ls
+      when: ansible_host == 'localhost2'

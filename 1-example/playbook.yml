@@ -1,0 +1,25 @@
+- name: Play 1
+  hosts: localhost
+  tasks:
+    - name: execute command 'ls'
+      changed_when: false
+      command: ls
+
+    - name: check if file exist
+      stat:
+        path: /tmp/test.txt
+      register: stat_file
+
+    - name: create file on home dir
+      command: touch /tmp/test.txt
+      changed_when: not stat_file.stat.exists
+
+    # Failed Example
+    - name: check if file exist
+      command: cat /tmp/test3.txt
+      register: check_file
+      changed_when: false
+      failed_when: >
+        ("No such file or directory" in check_file.stdout) or
+        (check_file.stderr != '') or
+        (check_file.rc == 10)

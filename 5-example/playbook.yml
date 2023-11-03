@@ -1,0 +1,13 @@
+- name: Play 1
+  hosts: localhost
+  tasks:
+    - name: create_file
+      command: touch /tmp/create_file.txt
+      notify: 
+        - create_another_file
+        - clean_file_1
+  handlers:
+    - name: create_another_file
+      command: touch /tmp/create_file2.txt
+    - name: clean_file_1
+      command: rm /tmp/create_file.txt

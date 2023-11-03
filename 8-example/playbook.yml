@@ -1,0 +1,5 @@
+- name: Play 1
+  hosts: vagrantvm1
+  tasks:
+    - name: create file using variable
+      command: "touch /tmp/geboy.txt"

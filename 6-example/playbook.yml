@@ -1,0 +1,19 @@
+- name: play 1
+  hosts: vagrantvm1
+  remote_user: ubuntu
+  become: true
+  tasks:
+    - name: install nginx
+      apt:
+        name: nginx
+        state: present
+    - name: run nginx
+      service:
+        name: nginx
+        state: started
+    - name: create content
+      copy:
+        content: "Ini hasil dari ansible"
+        dest: /var/www/html/index.html
+
+        

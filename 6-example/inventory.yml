@@ -1,0 +1,6 @@
+all:
+  hosts:
+    vagrantvm1:
+      ansible_connection: ssh
+      ansible_host: "192.168.56.10"
+      ansible_user: vagrant

@@ -1,0 +1,13 @@
+- name: Play 1
+  hosts: localhost
+  tasks:
+    - name: create multiple files using list
+      command: touch /tmp/{{item}}.txt
+      with_items:
+        - cat
+        - dog
+        - mouse
+
+    - name: create multiple files using sequence
+      command: touch /tmp/{{item}}.txt
+      with_sequence: '4'

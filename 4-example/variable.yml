@@ -1,0 +1,7 @@
+- name: learn variable
+  hosts: localhost
+  vars:
+    - filename: ansible-vars.txt
+  tasks:
+    - name: create file using variable
+      command: "touch /tmp/{{filename}}"

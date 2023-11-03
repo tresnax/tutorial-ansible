@@ -1,0 +1,7 @@
+- name: learn variable
+  hosts: localhost
+  vars_files: 
+    vars_file
+  tasks:
+    - name: create file using variable
+      command: "touch /tmp/{{filename}}"
