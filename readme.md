@@ -2,7 +2,7 @@
 
 Panduan ini merupakan sebuah catatan sederhana untuk belajar Ansible beserta dengan beberapa studi case didalamnya. Dan mungkin akan mendapatkan update sesuai dengan case baru yang penulis dapatkan kedepannya.
 
-# Daftar Isi
+## Daftar Isi
 - [Apa itu ansbile ?](#apa-itu-ansbile-)
 - [Istilah](#istilah)
     - [Inventory](#inventory)
