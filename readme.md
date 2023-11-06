@@ -39,7 +39,7 @@ Masih banyak fitur lainnya yang mungkin akan kita bahas secara detail kedepannya
 
 ## Vagrant
 
-Pada panduan ini saya mengaplikasikan beberapa case menggunakan VM dengan bantuan vagrant, saya menyertakan juga Vagrantfile pada folder berikut [vagrant setup](/tree/master/vagrant). Ini hanya optional saja, kamu bisa menggunakan server langsung atau cloud untuk mengaplikasikan vagrant ini.
+Pada panduan ini saya mengaplikasikan beberapa case menggunakan VM dengan bantuan vagrant, saya menyertakan juga Vagrantfile pada folder berikut [vagrant setup](/vagrant). Ini hanya optional saja, kamu bisa menggunakan server langsung atau cloud untuk mengaplikasikan vagrant ini.
 
 Jika kamu berminat, kamu bisa pelajari vagrant pada link berikut [Belajar Vagrant](https://www.warriornux.com/mengenal-vagrant/)
 
