@@ -59,6 +59,3 @@ skipping: no hosts matched
 PLAY RECAP *************************************************************************************************************
 ```
 Kecuali kita melakukan testing pada local computer kita, maka playbook bisa dijalankan karena hanya membaca localhost saja.
-
-## Reference
-- [Lukman Lab](https://www.lukmanlab.com/cara-enkripsi-file-yaml-menggunakan-ansible-vault/)

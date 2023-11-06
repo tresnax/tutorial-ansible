@@ -4,4 +4,3 @@ Kondisi ini bisa di implementasikan apabila kita memiliki banyak server didalam 
 
 Contoh disini adalah memberikan perintah hanya pada localhost2 saja.
 
-Source : https://github.com/naufalafif/belajar-ansible/blob/master/2_conditional/readme.md

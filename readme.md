@@ -46,11 +46,17 @@ Jika kamu berminat, kamu bisa pelajari vagrant pada link berikut [Belajar Vagran
 ## Roadmap Case
 
 Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
-1. Menjalankan Ansible di Local [Link](/tree/master/1-example)
-2. Ansible Conditional [Link](/tree/master/2-example)
-3. Ansible Loop [Link](/tree/master/3-example)
-4. Ansible Variable [Link](/tree/master/4-example)
-5. Notify & Handler [Link](/tree/master/5-example)
-6. Install Nginx di VM [Link](/tree/master/6-example)
-7. Deploy Docker di VM [Link](/tree/master/7-example)
-8. Vault [Link](/tree/master/8-example)
+1. Menjalankan Ansible di Local [Link](/1-example)
+2. Ansible Conditional [Link](/2-example)
+3. Ansible Loop [Link](/3-example)
+4. Ansible Variable [Link](/4-example)
+5. Notify & Handler [Link](/5-example)
+6. Install Nginx di VM [Link](/6-example)
+7. Deploy Docker di VM [Link](/7-example)
+8. Vault [Link](/8-example)
+
+## Reference
+
+Terima kasih banyak kepada kalian yang sudah menjadi referensi saya untuk menulis panduan sederhana ini :
+- [Belajar Ansible Git - Naufal Afif](https://github.com/naufalafif/belajar-ansible)
+- [Ansible Artikel - Lukman Lab](https://www.lukmanlab.com/cara-enkripsi-file-yaml-menggunakan-ansible-vault/)
