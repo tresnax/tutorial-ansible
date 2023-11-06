@@ -2,7 +2,19 @@
 
 Panduan ini merupakan sebuah catatan sederhana untuk belajar Ansible beserta dengan beberapa studi case didalamnya. Dan mungkin akan mendapatkan update sesuai dengan case baru yang penulis dapatkan kedepannya.
 
-## Apa sih ansible ?
+# Daftar Isi
+- [Apa itu ansbile ?](#apa-itu-ansbile-)
+- [Istilah](#istilah)
+    - [Inventory](#inventory)
+    - [Playbook](#playbook)
+    - [Roles](#roles)
+    - [Vault](#vault)
+- [Vagrant](#vagrant)
+- [Roadmap Case](#roadmap-case)
+- [Referensi](#reference)
+
+
+## Apa itu ansible ?
 
 Ansible sendiri merupakan sebuah tools automation yang akan membantu kamu untuk mempermudah proses post installation. Contohnya ketika kamu selesai melakukan installasi server kamu pasti akan melanjutkan installasi service seperi webserver, database server dll. Bayangkan apabila servernya banyak dan kamu harus melakukan manual pasti akan memakan waktu cukup banyak.
 
@@ -46,14 +58,14 @@ Jika kamu berminat, kamu bisa pelajari vagrant pada link berikut [Belajar Vagran
 ## Roadmap Case
 
 Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
-1. Menjalankan Ansible di Local [Link](/1-example)
-2. Ansible Conditional [Link](/2-example)
-3. Ansible Loop [Link](/3-example)
-4. Ansible Variable [Link](/4-example)
-5. Notify & Handler [Link](/5-example)
-6. Install Nginx di VM [Link](/6-example)
-7. Deploy Docker di VM [Link](/7-example)
-8. Vault [Link](/8-example)
+1. [Menjalankan Ansible di Local](/1-example)
+2. [Ansible Conditional](/2-example)
+3. [Ansible Loop](/3-example)
+4. [Ansible Variable](/4-example)
+5. [Notify & Handler](/5-example)
+6. [Install Nginx di VM](/6-example)
+7. [Deploy Docker di VM](/7-example)
+8. [Vault](/8-example)
 
 ## Reference
 
