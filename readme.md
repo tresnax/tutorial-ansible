@@ -40,15 +40,16 @@ Jika kamu berminat, kamu bisa pelajari vagrant pada link berikut [Belajar Vagran
 ## Roadmap Case
 
 Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
-1. [Menjalankan Ansible di Local](/1-run-ansbile-local)
-2. [Ansible Conditional](/2-ansible-conditional)
-3. [Ansible Loop](/3-ansible-loop)
-4. [Ansible Variable](/4-ansible-variable)
-5. [Notify & Handler](/5-notify-handler)
-6. [Install Nginx di VM](/6-install-nginx)
-7. [Deploy Docker di VM](/7-deploy-docker)
-8. [Vault](/8-vault)
-9. [Deploy with ssh password](/9-deploy-ssh-pass)
+1. [Menjalankan Ansible di Local](/01-run-ansbile-local)
+2. [Ansible Conditional](/02-ansible-conditional)
+3. [Ansible Loop](/03-ansible-loop)
+4. [Ansible Variable](/04-ansible-variable)
+5. [Notify & Handler](/05-notify-handler)
+6. [Install Nginx di VM](/06-install-nginx)
+7. [Deploy Docker di VM](/07-deploy-docker)
+8. [Vault](/08-vault)
+9. [Deploy with ssh password](/09-deploy-ssh-pass)
+10. [Server Full Seup](/10-server-full-setup)
 
 ## Reference
 
