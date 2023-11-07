@@ -24,12 +24,36 @@ Ada 2 Komponen utama yang akan sering kamu temukan pada ansible, diantaranya :
 
 ### Inventory
 
-Inventory merupakan file yang berikan informasi mengenai server/host yang akan menjadi target installasi, informasinya berisian alamat ip, username, password, port, dll.
+Inventory merupakan file yang berikan informasi mengenai server/host yang akan menjadi target installasi, informasinya berisian alamat ip, username, password, port, dll. Contohnya :
+
+```
+all:
+  hosts:                                    # Mendefinisikan bahwa ini host
+    server1:                                # Nama dari host
+      ansible_connection: ssh               # protocol yang digunakan
+      ansible_host: "192.168.56.11"         # Alamat Host
+      ansible_user: vagrant                 # Username Host
+```
 
 ### Playbook
 
-Playbook merupakan file yang berisikan script automasi yang akan kita jalankan nantinya, dalam playbook ini nanti akan di mention host mana yang akan menjalankan script tersebut dan apa saja task yang akan dijalankan pada saat file di eksekusi.
+Playbook merupakan file yang berisikan script automasi yang akan kita jalankan nantinya, dalam playbook ini nanti akan di mention host mana yang akan menjalankan script tersebut dan apa saja task yang akan dijalankan pada saat file di eksekusi. Contohnya
 
+```
+- name: Playbook 1                          # Mendefinisikan Task playbook
+  hosts: server1                            # Host yang akan dieksekusi sesuai inventory
+  tasks:                                    # Memulai Task
+    - name: membuat file test               # Nama task yang akan dijalankan
+      command: touch /tmp/test.txt          # Eksekusi task (kasus ini adalah command)
+```
+
+### Menjalankan Ansible Playbook
+
+Untuk menjalankan ansible anda hanya perlu menggunakan perintah berikut pada folder utama inventory dan playbook yang sudah dibuat.
+
+```
+ansible-playbook -i inventory.yml playbook.yml
+```
 
 ## Vagrant
 
@@ -56,3 +80,4 @@ Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
 Terima kasih banyak kepada kalian yang sudah menjadi referensi saya untuk menulis panduan sederhana ini :
 - [Belajar Ansible Git - Naufal Afif](https://github.com/naufalafif/belajar-ansible)
 - [Ansible Artikel - Lukman Lab](https://www.lukmanlab.com/cara-enkripsi-file-yaml-menggunakan-ansible-vault/)
+- [Chat Open AI](https://chat.openai.com/)

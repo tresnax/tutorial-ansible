@@ -16,6 +16,7 @@
           - libapache2-mod-php
           - expect #service ini digunakan untuk setup mysql
           - vsftpd
+          - python3-pip
         state: present
     
     - name: install pymysql
