@@ -4,11 +4,9 @@ Panduan ini merupakan sebuah catatan sederhana untuk belajar Ansible beserta den
 
 ## Daftar Isi
 - [Apa itu ansbile ?](#apa-itu-ansbile-)
-- [Istilah](#istilah)
+- [Komponen Utma](#komponen-utama)
     - [Inventory](#inventory)
     - [Playbook](#playbook)
-    - [Roles](#roles)
-    - [Vault](#vault)
 - [Vagrant](#vagrant)
 - [Roadmap Case](#roadmap-case)
 - [Referensi](#reference)
@@ -20,14 +18,9 @@ Ansible sendiri merupakan sebuah tools automation yang akan membantu kamu untuk 
 
 Dengan ansible kamu dapat membuat satu konfigurasi yang bisa digunakan secara berulang untuk server lainnya sehingga kamu hanya perlu menjalankan script tersebut.
 
-## Istilah
+## Komponen Utama
 
-Ada beberapa istilah yang akan sering kamu temukan pada ansible, diantaranya :
-- Inventory
-- Playbook
-- Roles
-- Vault
-- Dll
+Ada 2 Komponen utama yang akan sering kamu temukan pada ansible, diantaranya :
 
 ### Inventory
 
@@ -37,17 +30,6 @@ Inventory merupakan file yang berikan informasi mengenai server/host yang akan m
 
 Playbook merupakan file yang berisikan script automasi yang akan kita jalankan nantinya, dalam playbook ini nanti akan di mention host mana yang akan menjalankan script tersebut dan apa saja task yang akan dijalankan pada saat file di eksekusi.
 
-### Roles
-
-Roles merupakan fitur dari ansible untuk mengelompokan script menjadi beberapa bagian, sehingga hanya dengan 1 file playbook kita dapat menjalankan task sesuai dengan kebutuhan server sesuai dengan role. Misalkan didalam file kita membuat roles untuk webserver dan database server maka ketika kita melakukan eksekusi maka mereka hanya akan menjalankan proses tersebut saja.
-
-### Vault
-
-Vault merupakan fitur yang digunakan untuk meng-enkripsi file ansible sehingga tidak dapat dibaca secara langsung, ini menjadi salah satu fitur yang bisa digunakan untuk mengamankan file pada saat di distribusikan kepada tim yang akan menjalankan deployment tanpa takut credencialnya terbaca secara umum.
-
-### Dll
-
-Masih banyak fitur lainnya yang mungkin akan kita bahas secara detail kedepannya.
 
 ## Vagrant
 
@@ -58,14 +40,15 @@ Jika kamu berminat, kamu bisa pelajari vagrant pada link berikut [Belajar Vagran
 ## Roadmap Case
 
 Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
-1. [Menjalankan Ansible di Local](/1-example)
-2. [Ansible Conditional](/2-example)
-3. [Ansible Loop](/3-example)
-4. [Ansible Variable](/4-example)
-5. [Notify & Handler](/5-example)
-6. [Install Nginx di VM](/6-example)
-7. [Deploy Docker di VM](/7-example)
-8. [Vault](/8-example)
+1. [Menjalankan Ansible di Local](/1-run-ansbile-local)
+2. [Ansible Conditional](/2-ansible-conditional)
+3. [Ansible Loop](/3-ansible-loop)
+4. [Ansible Variable](/4-ansible-variable)
+5. [Notify & Handler](/5-notify-handler)
+6. [Install Nginx di VM](/6-install-nginx)
+7. [Deploy Docker di VM](/7-deploy-docker)
+8. [Vault](/8-vault)
+9. [Deploy with ssh password](/9-deploy-ssh-pass)
 
 ## Reference
 

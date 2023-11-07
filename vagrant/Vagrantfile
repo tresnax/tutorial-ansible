@@ -10,6 +10,10 @@ Vagrant.configure("2") do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
+  # Bagian ini digunakan apabila ingin connect ssh vagrant menggunakan user dan pass
+  #config.ssh.username = "ubuntu"
+  #config.ssh.password = "vagrant"
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
   config.vm.box = "ubuntu/bionic64"

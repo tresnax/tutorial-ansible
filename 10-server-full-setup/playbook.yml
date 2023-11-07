@@ -1,0 +1,59 @@
+- name: Server Full Setup
+  hosts: server1
+  become: yes
+  tasks:
+    - name: update repo
+      apt :
+        update_cache: yes
+    
+    - name: install service
+      apt:
+        name: 
+          - apache2
+          - php
+          - php-mysql
+          - mysql-server
+          - libapache2-mod-php
+          - expect #service ini digunakan untuk setup mysql
+          - vsftpd
+        state: present
+    
+    - name: install pymysql
+      pip:
+        name: pymysql
+        state: present
+
+    - name: Jalankan Webserver
+      service:
+        name: apache2
+        state: started
+
+    - name: Jalankan FTP
+      service:
+        name: vsftpd
+        state: started
+    
+    - name: Membuat Content Phpinfo
+      copy:
+        content: "<?php phpinfo(); ?>"
+        dest: /var/www/html/index.php
+    
+    - name: Menambahkan setup mysql
+      copy:
+        src: ./setup-mysql
+        dest: /tmp/
+    
+    - name: Setup mysql
+      shell: "sh -c 'chmod +x /tmp/setup-mysql ; /tmp/./setup-mysql'"
+
+    - name: Setup FTP
+      template:
+        src: ./vsftpd.conf.j2
+        dest: /etc/vsftpd.conf
+      notify: Restart vsftpd service
+    
+  handlers:
+    - name: Restart vsftpd service
+      service : 
+        name: vsftpd
+        state: restarted
