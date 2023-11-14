@@ -1,6 +1,5 @@
-- name: play 1
-  hosts: vagrantvm1
-  remote_user: ubuntu
+- name: Install and Deploy Docker
+  hosts: server1
   become: true
   vars:
     create_containers: 4

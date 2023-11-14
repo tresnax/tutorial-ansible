@@ -1,4 +1,4 @@
-- name: Play 1
+- name: Run Ansible Local
   hosts: localhost
   tasks:
     - name: execute command 'ls'

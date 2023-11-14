@@ -1,0 +1,31 @@
+- name: install kubernetes
+  hosts: all
+  become: yes
+  tasks:
+    - name: install repo
+      apt:
+        name:
+          - apt-transport-https
+          - curl
+        state: present
+    
+    - name: add repo
+      copy:
+        src: ./k8s-repo
+        dest: /tmp/k8s-repo
+    
+    - name: install repo
+      shell: "sh -c 'chmod +x /tmp/k8s-repo && /tmp/./k8s-repo'"
+    
+    - name: install kubernetes
+      apt:
+        name:
+          - kubelet
+          - kubeadm
+          - kubectl
+        state: present
+
+    - name: remove config containerd
+      file:
+        dest: sudo rm /etc/containerd/config.toml
+        state: absent

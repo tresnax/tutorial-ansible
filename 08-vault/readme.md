@@ -4,6 +4,9 @@ Pada kasus ini kita akan melakukan encrypsi pada file yaml yang kita miliki, ini
 
 Selain itu kita akan menjalankan file yang sudah di encryp tersebut.
 
+**Password Encrypt yang digunakan sekarang :** ansible
+
+
 ## Encrypt file YAML
 ```
 ansible-vault encrypt inventory.yml
@@ -30,21 +33,25 @@ $ANSIBLE_VAULT;1.1;AES256
 
 ```
 
+
 ## Edit file Encrypt
 ```
 ansible-vault edit inventory.yml
 ```
 Kamu akan dimintai password untuk membuka file encrypsi dan terminal akan membuka editor seperti nano atau vim
 
+
 ## Ganti Password Encrypt
 ```
 ansible-vault rekey inventory.yml
 ```
 
+
 ## Decrypt file YML
 ```
 ansible-vault decrypt inventory.yml
 ```
+
 
 ## Menjalankan Playbook Encrypt
 Untuk menjalankan ansible playbook dengan file yang encryp dapat kita gunakan perintah berikut
@@ -58,4 +65,5 @@ skipping: no hosts matched
 
 PLAY RECAP *************************************************************************************************************
 ```
+
 Kecuali kita melakukan testing pada local computer kita, maka playbook bisa dijalankan karena hanya membaca localhost saja.

@@ -1,0 +1,7 @@
+all:
+  hosts:
+    server1:
+      ansible_connection: ssh
+      ansible_host: "34.168.231.75"
+      ansible_user: tresna_gcp
+      ansible_port: 32022

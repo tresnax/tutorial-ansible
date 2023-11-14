@@ -79,5 +79,5 @@ Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
 
 Terima kasih banyak kepada kalian yang sudah menjadi referensi saya untuk menulis panduan sederhana ini :
 - [Belajar Ansible Git - Naufal Afif](https://github.com/naufalafif/belajar-ansible)
-- [Ansible Artikel - Lukman Lab](https://www.lukmanlab.com/cara-enkripsi-file-yaml-menggunakan-ansible-vault/)
+- [Ansible Artikel - Lukman Lab](https://www.lukmanlab.com/tag/ansible/)
 - [Chat Open AI](https://chat.openai.com/)

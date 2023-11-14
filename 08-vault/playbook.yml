@@ -1,5 +1,5 @@
-- name: Play 1
-  hosts: vagrantvm1
+- name: Ansible Vault
+  hosts: server
   tasks:
     - name: create file using variable
       command: "touch /tmp/geboy.txt"

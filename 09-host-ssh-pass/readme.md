@@ -1,7 +1,7 @@
 # Host with password SSH
 
 ## Service Tambahan
-Untuk bisa menggunakan password pada informasi host, anda perlu mengintsallkan openssl :
+Untuk bisa menggunakan password pada informasi host, anda perlu mengintsallkan sshpass :
 Ubuntu
 ```
 sudo apt-get install sshpass

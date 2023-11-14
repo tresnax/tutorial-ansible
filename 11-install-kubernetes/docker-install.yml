@@ -1,0 +1,48 @@
+- name: Install Docker
+  hosts: all
+  become: yes
+  tasks:
+    - name: update repo
+      apt:
+        update_cache: yes
+    
+    - name: install dependency
+      apt:
+        name: 
+          - ca-certificates
+          - curl
+          - gnupg
+        state: present
+    
+    - name: add repo
+      copy:
+        src: ./docker-repo
+        dest: /tmp/docker-repo
+    
+    - name: install repo
+      shell: "sh -c 'chmod +x /tmp/docker-repo && /tmp/./docker-repo'"
+             
+    - name: install docker
+      apt:
+        name:
+          - docker-ce 
+          - docker-ce-cli
+          - containerd.io
+          - docker-buildx-plugin
+          - docker-compose-plugin
+        state: present
+    
+    - name: enable service
+      service:
+        name: docker.service
+        enabled: yes
+
+    - name: remove config containerd
+      file:
+        dest: /etc/containerd/config.toml
+        state: absent
+     
+    - name: restart-containerd
+      service:
+        name: containerd
+        state: restarted

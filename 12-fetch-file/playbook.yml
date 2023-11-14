@@ -1,0 +1,9 @@
+- name: mengambil file
+  hosts: server1
+  tasks:
+    - name: membuat file
+      shell: "sh -c 'ls ~/  > /tmp/hasills.sh'"
+    
+    - fetch:
+        src: /tmp/hasills.sh
+        dest: /tmp/

@@ -1,6 +1,5 @@
-- name: play 1
-  hosts: vagrantvm1
-  remote_user: ubuntu
+- name: Install Nginx Server
+  hosts: server1
   become: true
   tasks:
     - name: install nginx
@@ -13,7 +12,7 @@
         state: started
     - name: create content
       copy:
-        content: "Ini hasil dari ansible"
+        content: "Ini hasil dari ansible brader"
         dest: /var/www/html/index.html
 
         
