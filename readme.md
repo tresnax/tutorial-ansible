@@ -74,6 +74,8 @@ Berikut Roadmap yang dapat kamu ikuti untuk belajar mengenai Ansible :
 8. [Vault](/08-vault)
 9. [Deploy with ssh password](/09-deploy-ssh-pass)
 10. [Server Full Seup](/10-server-full-setup)
+11. [Install kubernetes](/11-install-kubernetes)
+12. [Fetch File](/12-fetch-file) 
 
 ## Reference
 
