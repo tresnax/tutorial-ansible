@@ -1,0 +1,64 @@
+- name: Install Docker
+  hosts: all
+  become: yes
+  become_method: sudo
+  tasks:
+  
+#--------------------------------------------#
+# Docker Setup
+#--------------------------------------------#
+    - name: Install Support package
+      apt: update_cache=yes name={{ item }} state=latest
+      loop: [ 'ca-certificates', 'curl', 'gnupg' ]
+    
+    - name: Add Docker GPG apt Key
+      apt_key:
+        url: https://download.docker.com/linux/ubuntu/gpg
+        state: present
+    
+    - name: Add Docker Repository
+      apt_repository:
+        repo: deb https://download.docker.com/linux/ubuntu bionic stable
+        state: present
+    
+    - name: Install Docker
+      apt: name={{ item }} state=present
+      loop: [ 'docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-buildx-plugin', 'docker-compose-plugin', 'docker-compose' ]
+
+#--------------------------------------------#
+# Kubernetes Setup
+#--------------------------------------------#
+    - name: Add Suport Package
+      apt: update_cache=yes name={{ item }} state=present
+      loop: [ 'apt-transport-https', 'curl' ]
+    
+    - name: Add Kubernetes GPG apt Key
+      apt_key:
+        url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+        state: present
+
+    - name: Add Kubernetes Repository
+      apt_repository:
+        repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+        state: present
+    
+    - name: Install kubernetes
+      apt: update_cache=yes name=kubectl state=present
+    
+    - name: Remove default containerd
+      command: rm /etc/containerd/config.toml
+    
+    - name: Restart service containerd
+      service: name=containerd state=restarted
+
+#--------------------------------------------#
+# Minicube Setup
+#--------------------------------------------#
+    - name: Download minicube
+      command: curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+
+    - name: Install
+      command: install minikube-linux-amd64 /usr/local/bin/minikube
+    
+    - name: Run Minicube
+      command: minikube start
