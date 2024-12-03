@@ -1,60 +1,294 @@
 - name: Server Full Setup
   hosts: server1
   become: yes
+  become_method: sudo
   tasks:
-    - name: update repo
-      apt :
-        update_cache: yes
+
+# ---------------------------------------------------------
+# Preparation Install
+# ---------------------------------------------------------
+
+    - name: Update Repo
+      apt: update_cache=yes 
     
-    - name: install service
+    - name: Install Support Service
+      apt: name={{ item }} state=present
+      loop: [ 'python3-pip', 'expect' ]
+      # expect service digunakan untuk setup mysql
+
+# ---------------------------------------------------------
+# Install WebServer
+# ---------------------------------------------------------
+
+    - name: Install Apache
+      apt: name=apache2 state=present
+    
+    - name: Install PHP FULL
       apt:
-        name: 
-          - apache2
+        name:
           - php
+          - php-cli
+          - php-json
+          - php-common
           - php-mysql
-          - mysql-server
+          - php-zip
+          - php-gd
+          - php-mbstring
+          - php-curl
+          - php-xml
+          - php-bcmath
           - libapache2-mod-php
-          - expect #service ini digunakan untuk setup mysql
-          - vsftpd
-          - python3-pip
         state: present
     
-    - name: install pymysql
-      pip:
-        name: pymysql
-        state: present
+    - name: Install PHP-FPM
+      apt: name=php-fpm state=present
 
-    - name: Jalankan Webserver
-      service:
-        name: apache2
-        state: started
-
-    - name: Jalankan FTP
-      service:
-        name: vsftpd
-        state: started
+# ---------------------------------------------------------
+# Install Database [pilihan]
+# ---------------------------------------------------------
     
-    - name: Membuat Content Phpinfo
-      copy:
-        content: "<?php phpinfo(); ?>"
-        dest: /var/www/html/index.php
+    - name: Install MYSQL
+      apt: name=mysql-server state=present
+    
+    # - name: Install Postgresql
+    #   apt: name=postgresql state=present
+
+# ---------------------------------------------------------
+# Database Configuration (Optional)
+# ---------------------------------------------------------
+
+    - name: Install pymsql 
+      pip: name=pymysql state=present
+      # addson mysql untuk ansible
     
     - name: Menambahkan setup mysql
       copy:
-        src: ./setup-mysql
-        dest: /tmp/
-    
-    - name: Setup mysql
-      shell: "sh -c 'chmod +x /tmp/setup-mysql ; /tmp/./setup-mysql'"
+        dest: /tmp/mysql-setup.sh
+        content: |
+            #!/bin/bash
 
+            #Change mypassword to your password
+            yourpass="vagrant"
+
+            #Mysql Configuration using expect
+            expect << EOF
+                set passuy ""
+                spawn mysql -uroot -p --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED with mysql_native_password;"
+                expect -exact "Enter password:"
+                send -- "$passuy\r"
+                spawn mysql -uroot -p --connect-expired-password -e "ALTER USER 'root'@'localhost' IDENTIFIED BY '$yourpass';"
+                expect -exact "Enter password:"
+                send -- "$passuy\r"
+                spawn mysql -uroot -p$yourpass --connect-expired-password -e "DELETE FROM mysql.user WHERE User='root' AND Host NOT IN ('localhost', '127.0.0.1', '::1');"
+                spawn mysql -uroot -p$yourpass --connect-expired-password -e "DROP DATABASE IF EXISTS test;"
+                spawn mysql -uroot -p$yourpass --connect-expired-password -e "DELETE FROM mysql.db WHERE Db='test' OR Db='test\\_%';"
+                spawn mysql -uroot -p$yourpass --connect-expired-password -e "FLUSH PRIVILEGES;"
+                expect eof
+            EOF
+        mode: 0755
+    
+    - name: Run setup mysql
+      shell: "sh -c '/tmp/./mysql-setup.sh'"
+
+# ---------------------------------------------------------
+# Install FTP
+# ---------------------------------------------------------
+
+    - name: Install FTP
+      apt: name=vsftpd state=present
+
+    - name: Backup config FTP
+      command: mv /etc/vsftpd.conf /etc/vsftpd.conf.backup
+    
     - name: Setup FTP
       template:
         src: ./vsftpd.conf.j2
         dest: /etc/vsftpd.conf
-      notify: Restart vsftpd service
+
+# ---------------------------------------------------------
+# Install MalDet (Malware Detected)
+# ---------------------------------------------------------
+
+    - name: Install Support
+      apt: update_cache=yes name=inotify-tools state=present
+
+    - name: Download package Maldet
+      shell: wget -O /tmp/maldetect-current.tar.gz http://www.rfxn.com/downloads/maldetect-current.tar.gz
+
+    - name: Extract package
+      shell: tar -zxvf /tmp/maldetect-current.tar.gz -C /tmp/
+
+    - name: Install Maldet
+      shell: cd /tmp/maldetect-1.6.5/ && sudo ./install.sh
+
+    - name: Memberi waktu installasi
+      pause: seconds=30
+
+    - name: Config Maldet
+      shell: sed -i 's/scan_ignore_root="1"/scan_ignore_root="0"/g' /usr/local/maldetect/conf.maldet && sed -i 's/quarantine_hits="0"/quarantine_hits="1"/g' /usr/local/maldetect/conf.maldet
+
+    - name: Restart Maldet
+      service: name=maldet state=restarted
+
+    - name: Create CronJob
+      shell: echo "00 02  * * 0  root  maldet -a /" >> /etc/crontab && echo "23 00  1 * *  root  maldet -u" >> /etc/crontab
+
+    - name: Restart CronJob
+      service: name=cron state=restarted
+
+    - name: Remove Installation
+      shell: rm -f /tmp/maldetect-current.tar.gz && rm -Rf /tmp/maldetect-1.6.5
+
+# ---------------------------------------------------------
+# Install ClamAV (Antivirus)
+# ---------------------------------------------------------
+
+    - name: Install ClamAV
+      apt: update_cache=yes name=clamav state=present
+
+    - name: Stop service
+      service: name=clamav-freshclam state=stopped
+
+    - name: Update Virus Database
+      shell: freshclam
+
+    - name: Start service
+      service: name=clamav-freshclam state=started
+
+    - name: Create Quarantine directory
+      shell: mkdir -p /tmp/clamav/quarantine
+
+    - name: Create CronJob
+      shell: echo "00 01  * * 0  root  clamscan -r --move=/tmp/clamav/quarantine /home" >> /etc/crontab
+
+    - name: Restart CronJob
+      service: name=cron state=restarted
+
+# ---------------------------------------------------------
+# Install Mod_Evasive (Anti DDOS)
+# Reference : https://phoenixnap.com/kb/apache-mod-evasive
+# ---------------------------------------------------------
+
+    - name: Install mod_evasive
+      apt: name=libapache2-mod-evasive state=present
     
-  handlers:
-    - name: Restart vsftpd service
-      service : 
-        name: vsftpd
-        state: restarted
+    - name: Create Config
+      copy:
+        dest: /etc/apache2/mods-enabled/evasive.conf
+        content: |
+          <IfModule mod_evasive20.c>
+              DOSHashTableSize    3097
+              DOSPageCount        2
+              DOSSiteCount        50
+              DOSPageInterval     1
+              DOSSiteInterval     1
+              DOSBlockingPeriod   10
+              DOSEmailNotify      you@example.com
+              #DOSSystemCommand    "sudo /sbin/iptables -A INPUT -s %s -j DROP"
+              #DOSLogDir           "/var/log/mod_evasive"
+          </IfModule>
+
+    - name: Enable mod_evasive
+      apache2_module: name=evasive state=present
+    
+    - name: Restart Apache
+      service: name=apache2 state=restarted
+
+# ---------------------------------------------------------
+# Install Monit
+# ---------------------------------------------------------
+
+    - name: Install Monit
+      apt: name=monit state=present
+    
+    - name: Config Monit
+      copy:
+        dest: /etc/monit/monitrc
+        content: |
+          set daemon 60
+          set log /var/log/monit.log
+          set idfile /var/lib/monit/id
+          set statefile /var/lib/monit/state
+          set eventqueue
+              basedir /var/lib/monit/events  # set the base directory where events will be stored
+              slots 100                      # optionally limit the queue size
+          set httpd port 8080 and
+              use address 0.0.0.0
+              allow 0.0.0.0/0
+              allow admin:admin
+          include /etc/monit/conf.d/*
+          include /etc/monit/conf-enabled/*
+    
+
+    - name: Config Monitoring Apache2
+      copy:
+        dest: /etc/monit/conf.d/apache2
+        content: |
+          check process apache2 with pidfile /var/run/apache2/apache2.pid
+            start program = "/usr/sbin/service apache2 start"
+            stop program = "/usr/sbin/service apache2 stop"
+            if failed port 80 protocol http then restart
+            if 5 restarts within 5 cycles then timeout
+    
+    
+    - name: Config Monitoring PHP-FPM
+      copy:
+        dest: /etc/monit/conf.d/php-fpm
+        content: |
+          check process php-fpm with pidfile /run/php/php8.1-fpm.pid
+            start program = "/usr/sbin/service php8.1-fpm start"
+            stop program = "/usr/sbin/service php8.1-fpm stop"
+            if failed port 80 protocol http then restart
+            if 5 restarts within 5 cycles then timeout
+    
+
+    - name: Config Monitoring MYSQL
+      copy:
+        dest: /etc/monit/conf.d/mysql
+        content: |
+          check process mysql with matching "mysqld"
+            start program = "/usr/sbin/service mysql start"
+            stop program = "/usr/sbin/service mysql stop"
+            if failed host 127.0.0.1 port 3306 protocol mysql then restart
+            if 5 restarts within 5 cycles then timeout
+    
+
+    # - name: Config Monitoring PostgreSQL
+    #   copy:
+    #     dest: /etc/monit/conf.d/postgresql
+    #     content: |
+    #       check process postgresql with pidfile /var/run/postgresql/14-main.pid
+    #         start program = "/usr/sbin/service postgresql start"
+    #         stop program = "/usr/sbin/service postgresql stop"
+    #         if failed port 5432 protocol pgsql then restart
+    #         if 5 restarts within 5 cycles then timeout
+    
+
+    - name: Memastikan Config Benar
+      shell: monit -t
+    
+    - name: Restart Monit
+      service: name=monit state=restarted
+
+
+# ---------------------------------------------------------
+# Setup Firewall
+# ---------------------------------------------------------
+
+    - name: Allow outgoing
+      ufw: default=allow direction=outgoing
+
+    - name: Allow incoming
+      ufw: default=deny direction=incoming
+
+    - name: Allow Port 22 to IP Spesific
+      ufw: rule=allow port=22 proto=tcp 
+
+    - name: Allow Port 80
+      ufw: rule=allow port=80 proto=tcp 
+    
+    - name: Allow Port 8080
+      ufw: rule=allow port=8080 proto=tcp 
+
+    - name: Enable Firewall
+      ufw: state=enabled

@@ -1,15 +1,18 @@
 - name: Install Nginx Server
   hosts: server1
   become: true
+  become_method: sudo
   tasks:
     - name: install nginx
       apt:
         name: nginx
         state: present
+
     - name: run nginx
       service:
         name: nginx
         state: started
+
     - name: create content
       copy:
         content: "Ini hasil dari ansible brader"

@@ -1,48 +1,49 @@
-- name: Install and Deploy Docker
+- name: Install Docker and Deploy Nginx
   hosts: server1
   become: true
+  become_method: sudo
   vars:
     create_containers: 4
-    default_container_name: vue-app
-    default_container_image: naufalafif58/vue-crud-example
-    default_container_exposed_port: 8888
+    container_name: nginx
+    container_image: nginx:alpine
+    container_exposed_port: 8888
 
   tasks:
-    - name: Install aptitude using apt
-      apt: name=aptitude state=latest update_cache=yes force_apt_get=yes
-
-    - name: Install required system packages
-      apt: name={{ item }} state=latest update_cache=yes
-      loop: [ 'apt-transport-https', 'ca-certificates', 'curl', 'software-properties-common', 'python3-pip', 'virtualenv', 'python3-setuptools']
-
+#--------------------------------------------#
+# Docker Setup
+#--------------------------------------------#
+    - name: Install Support package
+      apt: update_cache=yes name={{ item }} state=latest
+      loop: [ 'ca-certificates', 'curl', 'gnupg' ]
+    
     - name: Add Docker GPG apt Key
       apt_key:
         url: https://download.docker.com/linux/ubuntu/gpg
         state: present
-
+    
     - name: Add Docker Repository
       apt_repository:
         repo: deb https://download.docker.com/linux/ubuntu bionic stable
         state: present
+    
+    - name: Install Docker
+      apt: name={{ item }} state=present
+      loop: [ 'docker-ce', 'docker-ce-cli', 'containerd.io', 'docker-buildx-plugin', 'docker-compose-plugin', 'docker-compose' ]
 
-    - name: Update apt and install docker-ce
-      apt: update_cache=yes name=docker-ce state=latest
-
-    - name: Install Docker Module for Python
-      pip:
-        name: docker
-
+#--------------------------------------------#
+# Docker Deploy Nginx
+#--------------------------------------------#
     - name: Pull default Docker image
       docker_image:
-        name: "{{ default_container_image }}"
+        name: "{{ container_image }}"
         source: pull
 
     - name: check container stat
-      command: "curl localhost:{{default_container_exposed_port}}"
+      command: "curl localhost:{{container_exposed_port}}"
       failed_when: false
       register: container_stat
 
     - name: app container
-      command: sudo docker run -d --name {{default_container_name}} -p {{default_container_exposed_port}}:80 {{default_container_image}}
+      command: sudo docker run -d --name {{container_name}} -p {{container_exposed_port}}:80 {{container_image}}
       when: >
         "Connection refused" in container_stat.stderr
